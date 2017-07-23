@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FilterFramework.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilterFramework.Controllers
 {
+    //[Profile]
     public class HomeController : Controller
     {
         public IActionResult Index()
