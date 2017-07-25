@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FilterFramework.Controllers
 {
-    [TypeFilter(typeof(DiagnosticsFilter))]
-    [ServiceFilter(typeof(TimeFilter))]
+    [Message("This is the Controller-Scoped Filter")]
     public class HomeController : Controller
     {
+       
         public IActionResult Index()
         {
             return View("Message", "This is the Index action on the Home controller");
