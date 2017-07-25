@@ -11,19 +11,29 @@ namespace FilterFramework.Infrastructure
     public class ProfileAttribute : ActionFilterAttribute
     {
         private Stopwatch timer;
+        private double actionTime;
 
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override async Task OnActionExecutionAsync(
+            ActionExecutingContext context,
+            ActionExecutionDelegate next)
         {
             timer = Stopwatch.StartNew();
+            await next();
+            actionTime = timer.Elapsed.TotalMilliseconds;
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context)
+        public override async Task OnResultExecutionAsync(
+            ResultExecutingContext context,
+            ResultExecutionDelegate next)
         {
+            await next();
             timer.Stop();
-            string result = "<div>Elapsed time: "
+            string result = "<div>Action time: "
+                            + $"{actionTime} ms</div><div>Total time: "
                             + $"{timer.Elapsed.TotalMilliseconds} ms</div>";
-            byte[] bytes = Encoding.UTF8.GetBytes(result);
-            context.HttpContext.Response.Body.Write(bytes, 0, bytes.Length);
+            byte[] bytes = Encoding.ASCII.GetBytes(result);
+            await context.HttpContext.Response.Body.WriteAsync(bytes,
+                0, bytes.Length);
         }
     }
 }
